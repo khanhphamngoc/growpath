@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GrowPath — Mockup</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --parent: #4F46E5;
+      --parent-light: #EEF2FF;
+      --parent-mid: #818CF8;
+      --child: #F97316;
+      --child-light: #FFF7ED;
+      --child-mid: #FB923C;
+      --success: #10B981;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-300: #D1D5DB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-600: #4B5563;
+      --gray-700: #374151;
+      --gray-800: #1F2937;
+      --gray-900: #111827;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.14);
+    }
+
+    body {
+      background: #E8EAF0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+    }
+
+    /* DEVICE FRAME */
+    .device-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .device {
+      width: 390px;
+      height: 844px;
+      background: white;
+      border-radius: 50px;
+      box-shadow: 0 0 0 12px #1a1a1a, 0 0 0 14px #333, var(--shadow-lg);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NOTCH */
+    .notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 126px;
+      height: 37px;
+      background: #1a1a1a;
+      border-radius: 0 0 22px 22px;
+      z-index: 100;
+    }
+
+    /* STATUS BAR */
+    .status-bar {
+      height: 54px;
+      padding: 14px 28px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-shrink: 0;
+      z-index: 99;
+    }
+    .status-time { font-size: 15px; font-weight: 600; color: var(--gray-800); }
+    .status-icons { display: flex; gap: 6px; align-items: center; }
+    .status-icon { font-size: 13px; color: var(--gray-700); }
+
+    /* SCREEN CONTENT */
+    .screen {
+      display: none;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex-direction: column;
+      scrollbar-width: none;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+    .screen.active { display: flex; }
+
+    /* NAVIGATION CONTROLS (outside phone) */
+    .nav-controls {
+      background: white;
+      border-radius: 20px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow);
+      width: 390px;
+    }
+    .nav-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-400);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .nav-flows {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .flow-section {
+      width: 100%;
+      margin-bottom: 6px;
+    }
+    .flow-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-400);
+      margin-bottom: 6px;
+      display: block;
+    }
+    .flow-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+    .nav-btn {
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gray-200);
+      background: white;
+      font-size: 12px;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .nav-btn:hover { border-color: var(--parent); color: var(--parent); }
+    .nav-btn.active { background: var(--parent); border-color: var(--parent); color: white; }
+    .nav-btn.child-btn:hover { border-color: var(--child); color: var(--child); }
+    .nav-btn.child-btn.active { background: var(--child); border-color: var(--child); color: white; }
+
+    /* SHARED COMPONENTS */
+    .btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: var(--radius);
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.2px;
+    }
+    .btn-primary {
+      background: var(--parent);
+      color: white;
+    }
+    .btn-primary:hover { filter: brightness(1.1); }
+    .btn-child {
+      background: var(--child);
+      color: white;
+    }
+    .btn-secondary {
+      background: var(--gray-100);
+      color: var(--gray-700);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--gray-500);
+      font-size: 14px;
+    }
+
+    .app-header {
+      padding: 12px 24px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .back-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--gray-100);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--gray-600);
+    }
+    .header-title { font-size: 17px; font-weight: 700; color: var(--gray-800); }
+
+    .screen-body {
+      padding: 0 24px 100px;
+      flex: 1;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .tag-parent { background: var(--parent-light); color: var(--parent); }
+    .tag-child { background: var(--child-light); color: var(--child); }
+    .tag-ai { background: #F0FDF4; color: #16A34A; }
+
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 18px;
+      border: 1.5px solid var(--gray-100);
+      margin-bottom: 12px;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 10px;
+    }
+
+    .input-group { margin-bottom: 16px; }
+    .input-label { font-size: 13px; font-weight: 600; color: var(--gray-600); margin-bottom: 6px; display: block; }
+    .input-field {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--gray-200);
+      font-size: 15px;
+      color: var(--gray-800);
+      background: var(--gray-50);
+      outline: none;
+    }
+    .input-field:focus { border-color: var(--parent); background: white; }
+    .input-field.child-input:focus { border-color: var(--child); }
+    textarea.input-field { resize: none; min-height: 80px; }
+
+    .option-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gray-200);
+      background: white;
+      font-size: 13px;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .chip.selected-p { background: var(--parent-light); border-color: var(--parent); color: var(--parent); font-weight: 600; }
+    .chip.selected-c { background: var(--child-light); border-color: var(--child); color: var(--child); font-weight: 600; }
+
+    .bottom-bar {
+      position: sticky;
+      bottom: 0;
+      background: white;
+      padding: 16px 24px 34px;
+      border-top: 1px solid var(--gray-100);
+      flex-shrink: 0;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: var(--gray-100);
+      border-radius: 2px;
+      margin-bottom: 20px;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s;
+    }
+    .progress-fill.parent { background: var(--parent); }
+    .progress-fill.child { background: var(--child); }
+
+    /* BOTTOM TABS */
+    .tab-bar {
+      position: sticky;
+      bottom: 0;
+      background: white;
+      border-top: 1px solid var(--gray-100);
+      display: flex;
+      padding: 8px 0 28px;
+      flex-shrink: 0;
+    }
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+    }
+    .tab-icon { font-size: 22px; }
+    .tab-label { font-size: 10px; font-weight: 500; color: var(--gray-400); }
+    .tab-item.active .tab-label { color: var(--parent); }
+    .tab-item.active-child .tab-label { color: var(--child); }
+
+    /* AVATAR */
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .avatar-parent { background: var(--parent-light); }
+    .avatar-child { background: var(--child-light); }
+
+    /* STARS / DECORATION */
+    .stars { font-size: 20px; letter-spacing: 4px; }
+
+    /* SCREEN SPECIFIC STYLES */
+
+    /* 1. SPLASH */
+    .splash-bg {
+      flex: 1;
+      background: linear-gradient(160deg, #4F46E5 0%, #7C3AED 50%, #EC4899 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 32px;
+      text-align: center;
+    }
+    .splash-logo { font-size: 42px; font-weight: 800; color: white; margin-bottom: 8px; }
+    .splash-tagline { font-size: 17px; color: rgba(255,255,255,0.85); line-height: 1.5; margin-bottom: 48px; max-width: 280px; }
+    .splash-cta {
+      width: 100%;
+      padding: 18px;
+      border-radius: 20px;
+      background: white;
+      border: none;
+      font-size: 17px;
+      font-weight: 700;
+      color: #4F46E5;
+      cursor: pointer;
+      margin-bottom: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .splash-login { color: rgba(255,255,255,0.7); font-size: 14px; background: transparent; border: none; cursor: pointer; }
+    .splash-badge {
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 6px 16px;
+      color: white;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    /* 2. PARENT PROFILE SETUP */
+    .welcome-hero {
+      background: linear-gradient(135deg, var(--parent-light), white);
+      padding: 28px 24px 24px;
+      margin-bottom: 8px;
+    }
+    .welcome-greeting { font-size: 24px; font-weight: 800; color: var(--gray-800); margin-bottom: 6px; }
+    .welcome-sub { font-size: 15px; color: var(--gray-500); line-height: 1.5; }
+
+    /* PERSONA REVEAL */
+    .reveal-bg {
+      background: linear-gradient(160deg, #4F46E5 0%, #7C3AED 60%, #EC4899 100%);
+      flex: 1;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+    .reveal-title { font-size: 26px; font-weight: 800; color: white; margin-bottom: 8px; }
+    .reveal-sub { font-size: 15px; color: rgba(255,255,255,0.8); margin-bottom: 24px; }
+    .persona-card {
+      background: white;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .persona-name { font-size: 22px; font-weight: 800; color: var(--gray-800); margin-bottom: 4px; }
+    .persona-headline { font-size: 15px; color: var(--parent); font-weight: 600; margin-bottom: 20px; }
+    .persona-dim { margin-bottom: 16px; }
+    .dim-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray-400); margin-bottom: 6px; }
+    .dim-value { font-size: 14px; color: var(--gray-700); line-height: 1.5; }
+    .dim-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .dim-tag {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* DELTA BADGE */
+    .delta-section {
+      background: #FEF3C7;
+      border: 1.5px solid #FCD34D;
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      margin-top: 16px;
+    }
+    .delta-title { font-size: 12px; font-weight: 700; color: #92400E; margin-bottom: 6px; }
+    .delta-text { font-size: 13px; color: #78350F; line-height: 1.5; }
+
+    /* CAREER CLUSTERS */
+    .career-card {
+      background: white;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .career-card:hover { border-color: var(--parent); box-shadow: 0 4px 16px rgba(79,70,229,0.1); }
+    .career-card.selected { border-color: var(--parent); background: var(--parent-light); }
+    .career-icon { font-size: 32px; margin-bottom: 8px; }
+    .career-title { font-size: 17px; font-weight: 700; color: var(--gray-800); margin-bottom: 4px; }
+    .career-desc { font-size: 13px; color: var(--gray-500); line-height: 1.5; }
+    .career-skills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .skill-tag {
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--parent-light);
+      color: var(--parent);
+    }
+
+    /* SKILL ROADMAP */
+    .roadmap-quarter {
+      margin-bottom: 20px;
+    }
+    .quarter-label { font-size: 12px; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+    .skill-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      background: white;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--gray-100);
+      margin-bottom: 8px;
+    }
+    .skill-progress-ring {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .skill-info { flex: 1; }
+    .skill-name { font-size: 14px; font-weight: 600; color: var(--gray-800); }
+    .skill-desc { font-size: 12px; color: var(--gray-400); }
+    .skill-bar { height: 4px; background: var(--gray-100); border-radius: 2px; margin-top: 6px; }
+    .skill-bar-fill { height: 100%; border-radius: 2px; background: var(--child); }
+
+    /* WEEKLY CHECK-IN */
+    .checkin-emoji-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+    .emoji-option {
+      aspect-ratio: 1;
+      border-radius: 16px;
+      border: 2px solid var(--gray-200);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--gray-50);
+    }
+    .emoji-option.selected { border-color: var(--child); background: var(--child-light); }
+    .emoji-option span:first-child { font-size: 28px; }
+    .emoji-option span:last-child { font-size: 10px; color: var(--gray-500); margin-top: 2px; }
+    .emoji-option.selected span:last-child { color: var(--child); font-weight: 600; }
+
+    /* MILESTONE */
+    .milestone-bg {
+      flex: 1;
+      background: linear-gradient(160deg, #F97316 0%, #EC4899 50%, #8B5CF6 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 28px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .milestone-confetti {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .confetti-dot {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      animation: fall 3s infinite;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(900px) rotate(720deg); opacity: 0; }
+    }
+    .milestone-badge {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      animation: pop 0.5s ease;
+    }
+    @keyframes pop {
+      0% { transform: scale(0); }
+      70% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .milestone-title { font-size: 28px; font-weight: 800; color: white; margin-bottom: 8px; }
+    .milestone-desc { font-size: 16px; color: rgba(255,255,255,0.9); margin-bottom: 32px; line-height: 1.5; }
+    .milestone-share {
+      width: 100%;
+      padding: 16px;
+      border-radius: 20px;
+      background: white;
+      border: none;
+      font-size: 16px;
+      font-weight: 700;
+      color: #F97316;
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
+    .milestone-continue {
+      color: rgba(255,255,255,0.8);
+      background: transparent;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* DIGEST */
+    .digest-stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .digest-stat {
+      background: var(--gray-50);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-value { font-size: 28px; font-weight: 800; color: var(--parent); }
+    .stat-label { font-size: 12px; color: var(--gray-400); }
+
+    /* CHILD HOME HERO */
+    .child-hero {
+      background: linear-gradient(135deg, #FFF7ED, #FEF3C7);
+      padding: 24px;
+      border-radius: 0 0 28px 28px;
+      margin-bottom: 8px;
+    }
+    .child-hero-greeting { font-size: 22px; font-weight: 800; color: var(--gray-800); }
+    .child-hero-sub { font-size: 14px; color: var(--gray-500); margin-top: 4px; }
+    .xp-bar-wrap { margin-top: 14px; }
+    .xp-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--gray-500); margin-bottom: 6px; }
+    .xp-bar { height: 8px; background: var(--gray-200); border-radius: 4px; }
+    .xp-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #F97316, #FBBF24); }
+
+    /* SECTION HEADER */
+    .section-header { font-size: 18px; font-weight: 800; color: var(--gray-800); margin-bottom: 4px; }
+    .section-sub { font-size: 14px; color: var(--gray-400); margin-bottom: 16px; }
+
+    /* ONBOARDING STEP INDICATOR */
+    .step-dots { display: flex; gap: 6px; justify-content: center; margin: 16px 0; }
+    .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-200); }
+    .step-dot.active-p { background: var(--parent); width: 20px; border-radius: 4px; }
+    .step-dot.active-c { background: var(--child); width: 20px; border-radius: 4px; }
+
+    /* DREAM SCREEN */
+    .dream-input-wrap {
+      background: linear-gradient(135deg, #FFF7ED, #FEF9C3);
+      border: 2.5px dashed #FCD34D;
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .dream-icon { font-size: 48px; margin-bottom: 12px; }
+    .dream-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid #FCD34D;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gray-800);
+      text-align: center;
+      padding: 8px 0;
+      outline: none;
+    }
+    .dream-input::placeholder { color: #FCD34D; }
+
+    /* AI PROCESSING */
+    .ai-processing {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+      background: linear-gradient(160deg, #F8FAFF, #F0F4FF);
+    }
+    .ai-spinner {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--parent), #EC4899);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin-bottom: 24px;
+      animation: spin 3s linear infinite;
+      box-shadow: 0 8px 24px rgba(79,70,229,0.3);
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .ai-text { font-size: 18px; font-weight: 700; color: var(--gray-800); margin-bottom: 8px; }
+    .ai-sub { font-size: 14px; color: var(--gray-400); line-height: 1.5; }
+    .ai-dots { font-size: 24px; color: var(--parent); letter-spacing: 4px; margin-top: 16px; animation: blink 1.5s infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* SCROLLABLE SECTION TAG */
+    .scroll-hint { text-align: center; font-size: 12px; color: var(--gray-300); margin-top: 8px; }
+
+    /* NOTIFICATION BADGE */
+    .notif-badge {
+      background: #EF4444;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+
+    /* PARENT DIGEST CHILD ROW */
+    .digest-child-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      background: var(--parent-light);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+    }
+    .digest-child-info { flex: 1; }
+    .digest-child-name { font-size: 16px; font-weight: 700; color: var(--gray-800); }
+    .digest-child-status { font-size: 13px; color: var(--gray-500); }
+
+    /* CONVERSATION STARTER */
+    .conv-starter {
+      background: linear-gradient(135deg, #EEF2FF, #F0FDF4);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+      border-left: 4px solid var(--parent);
+    }
+    .conv-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--parent); margin-bottom: 6px; }
+    .conv-text { font-size: 14px; color: var(--gray-700); line-height: 1.5; font-style: italic; }
+  </style>
+</head>
+<body>
+
+<div class="device-wrapper">
+
+  <!-- PHONE FRAME -->
+  <div class="device">
+    <div class="notch"></div>
+
+    <!-- STATUS BAR -->
+    <div class="status-bar" id="statusBar">
+      <span class="status-time">9:41</span>
+      <div class="status-icons">
+        <span class="status-icon">●●●</span>
+        <span class="status-icon">WiFi</span>
+        <span class="status-icon">🔋</span>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 1: SPLASH -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen active" id="screen-splash">
+      <div class="splash-bg">
+        <div class="splash-logo">🌱 GrowPath</div>
+        <div class="splash-tagline">Hành trình phát triển của con — được xây dựng cùng nhau</div>
+        <button class="splash-cta" onclick="goTo('screen-parent-signup')">Bắt đầu hành trình</button>
+        <button class="splash-login" onclick="goTo('screen-parent-home')">Đã có tài khoản? Đăng nhập</button>
+        <div class="splash-badge">🇻🇳 Dành cho gia đình Việt Nam</div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 2: PARENT SIGNUP -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-parent-signup">
+      <div class="welcome-hero">
+        <div class="tag tag-parent">Phụ huynh</div>
+        <div class="welcome-greeting">Xin chào, Ba/Mẹ! 👋</div>
+        <div class="welcome-sub">Hãy cùng GrowPath xây dựng hành trình phát triển cho con yêu.</div>
+      </div>
+      <div class="screen-body">
+        <div class="step-dots">
+          <div class="step-dot active-p"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Họ và tên của Ba/Mẹ</label>
+          <input class="input-field" type="text" placeholder="VD: Nguyễn Thị Hương" value="Nguyễn Thị Hương" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Email</label>
+          <input class="input-field" type="email" placeholder="email@gmail.com" value="huong.nguyen@gmail.com" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Thành phố</label>
+          <div class="option-chips">
+            <div class="chip selected-p">TP. Hồ Chí Minh</div>
+            <div class="chip">Hà Nội</div>
+            <div class="chip">Đà Nẵng</div>
+            <div class="chip">Khác</div>
+          </div>
+        </div>
+        <div style="margin-bottom:16px;">
+          <div class="input-label" style="margin-bottom:10px;">Đăng nhập với</div>
+          <div style="display:flex;gap:10px;">
+            <button style="flex:1;padding:12px;border-radius:12px;border:1.5px solid #E5E7EB;background:white;font-size:14px;cursor:pointer;">🔵 Google</button>
+            <button style="flex:1;padding:12px;border-radius:12px;border:1.5px solid #E5E7EB;background:white;font-size:14px;cursor:pointer;">🔷 Facebook</button>
+            <button style="flex:1;padding:12px;border-radius:12px;border:1.5px solid #E5E7EB;background:white;font-size:14px;cursor:pointer;">✈️ Telegram</button>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-bar">
+        <button class="btn btn-primary" onclick="goTo('screen-add-child')">Tiếp theo →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 3: ADD CHILD PROFILE -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-add-child">
+      <div class="app-header">
+        <button class="back-btn" onclick="goTo('screen-parent-signup')">←</button>
+        <span class="header-title">Thêm hồ sơ con</span>
+      </div>
+      <div class="screen-body">
+        <div class="step-dots">
+          <div class="step-dot"></div>
+          <div class="step-dot active-p"></div>
+          <div class="step-dot"></div>
+        </div>
+        <div style="text-align:center;margin-bottom:24px;">
+          <div style="width:90px;height:90px;border-radius:50%;background:#EEF2FF;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:40px;border:3px dashed #C7D2FE;">🧒</div>
+          <div style="font-size:13px;color:var(--gray-400);">Thêm ảnh (tuỳ chọn)</div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Tên con</label>
+          <input class="input-field" type="text" placeholder="VD: Minh Anh" value="Nguyễn Minh Anh" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Ngày sinh</label>
+          <input class="input-field" type="text" placeholder="DD/MM/YYYY" value="15/03/2015" />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Con đang học lớp mấy?</label>
+          <div class="option-chips">
+            <div class="chip">Lớp 3</div>
+            <div class="chip">Lớp 4</div>
+            <div class="chip selected-p">Lớp 5</div>
+            <div class="chip">Lớp 6</div>
+            <div class="chip">Lớp 7</div>
+            <div class="chip">Lớp 8</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Trường</label>
+          <input class="input-field" type="text" placeholder="Tên trường" value="THCS Nguyễn Du" />
+        </div>
+      </div>
+      <div class="bottom-bar">
+        <button class="btn btn-primary" onclick="goTo('screen-parent-discovery')">Tiếp theo →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 4: PARENT DISCOVERY INPUT -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-parent-discovery">
+      <div class="app-header">
+        <button class="back-btn" onclick="goTo('screen-add-child')">←</button>
+        <span class="header-title">Ba/Mẹ thấy con thế nào?</span>
+      </div>
+      <div style="padding:0 24px 12px;">
+        <div class="progress-bar"><div class="progress-fill parent" style="width:43%"></div></div>
+        <div class="tag tag-parent">Bước 3/7 — Điểm mạnh</div>
+        <p style="font-size:14px;color:var(--gray-500);margin-top:6px;line-height:1.5;">Chia sẻ những điều Ba/Mẹ quan sát được ở con. Không có câu trả lời đúng hay sai — chỉ có góc nhìn của Ba/Mẹ.</p>
+      </div>
+      <div class="screen-body" style="padding-top:0;">
+        <div class="card">
+          <div class="card-title">💪 Điểm mạnh của con</div>
+          <p style="font-size:13px;color:var(--gray-400);margin-bottom:12px;">Bạn thấy con tỏa sáng nhất khi làm gì?</p>
+          <div class="option-chips" style="margin-bottom:12px;">
+            <div class="chip selected-p">Sáng tạo</div>
+            <div class="chip selected-p">Tư duy logic</div>
+            <div class="chip">Lãnh đạo</div>
+            <div class="chip">Nghệ thuật</div>
+            <div class="chip">Toán học</div>
+            <div class="chip selected-p">Kể chuyện</div>
+            <div class="chip">Thể thao</div>
+            <div class="chip">Âm nhạc</div>
+          </div>
+          <textarea class="input-field" placeholder="Kể thêm về điểm mạnh của con...">Con rất thích đặt câu hỏi về mọi thứ xung quanh, luôn tìm cách giải thích tại sao sự vật hoạt động như vậy.</textarea>
+        </div>
+
+        <div class="card">
+          <div class="card-title">⭐ Ước mơ — Ba/Mẹ nghĩ sao?</div>
+          <p style="font-size:13px;color:var(--gray-400);margin-bottom:12px;">Con hay nói về ước mơ gì? Ba/Mẹ mong muốn gì cho tương lai của con?</p>
+          <textarea class="input-field" placeholder="Ước mơ và kỳ vọng của Ba/Mẹ cho con...">Con hay nói muốn trở thành nhà khoa học hoặc kỹ sư. Ba Mẹ cũng thấy con có tố chất cho những lĩnh vực đòi hỏi tư duy phân tích.</textarea>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🌱 Điểm cần cải thiện</div>
+          <p style="font-size:13px;color:var(--gray-400);margin-bottom:12px;">Con đang gặp khó khăn ở đâu? Ba/Mẹ muốn giúp con phát triển thêm điều gì?</p>
+          <div class="option-chips">
+            <div class="chip selected-p">Kiên nhẫn</div>
+            <div class="chip">Tự tin</div>
+            <div class="chip selected-p">Tổ chức & kế hoạch</div>
+            <div class="chip">Giao tiếp</div>
+            <div class="chip">Làm việc nhóm</div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-bar">
+        <button class="btn btn-primary" onclick="goTo('screen-waiting-child')">Hoàn thành phần Ba/Mẹ →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 5: WAITING FOR CHILD -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-waiting-child">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center;">
+        <div style="font-size:72px;margin-bottom:24px;">⏳</div>
+        <div style="font-size:22px;font-weight:800;color:var(--gray-800);margin-bottom:12px;">Chờ Minh Anh hoàn thành phần của con!</div>
+        <div style="font-size:15px;color:var(--gray-400);line-height:1.6;margin-bottom:32px;">GrowPath đã gửi thông báo đến ứng dụng của con. Khi Minh Anh hoàn thành, chúng ta cùng khám phá bản sắc của con nhé!</div>
+        <div style="background:var(--parent-light);border-radius:16px;padding:20px;width:100%;margin-bottom:24px;">
+          <div style="font-size:13px;color:var(--parent);font-weight:700;margin-bottom:8px;">📱 Hoặc mời con dùng ngay</div>
+          <div style="font-size:13px;color:var(--gray-500);">Đưa điện thoại cho Minh Anh để con tự điền phần của mình</div>
+        </div>
+        <button class="btn btn-primary" onclick="goTo('screen-child-discovery')" style="margin-bottom:12px;">Đưa cho con điền ngay →</button>
+        <button class="btn btn-ghost" onclick="goTo('screen-parent-home')">Quay lại trang chủ</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 6: CHILD DISCOVERY INPUT -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-child-discovery">
+      <div style="background:linear-gradient(135deg,#FFF7ED,#FEF3C7);padding:20px 24px 16px;">
+        <div class="tag tag-child">Dành cho con 🌟</div>
+        <div style="font-size:22px;font-weight:800;color:var(--gray-800);margin-top:4px;">Xin chào Minh Anh!</div>
+        <div style="font-size:14px;color:var(--gray-500);margin-top:4px;">Không có câu trả lời đúng hay sai — chỉ có câu trả lời của con!</div>
+        <div class="progress-bar" style="margin-top:12px;"><div class="progress-fill child" style="width:30%"></div></div>
+      </div>
+      <div class="screen-body">
+        <div class="card" style="border-color:#FED7AA;">
+          <div class="card-title" style="color:var(--child);">⭐ Ước mơ của con</div>
+          <p style="font-size:14px;color:var(--gray-600);margin-bottom:16px;">Con muốn trở thành ai hoặc làm gì khi lớn lên? Đừng ngại — ước mơ nào cũng đẹp!</p>
+          <div class="dream-input-wrap">
+            <div class="dream-icon">🌠</div>
+            <input class="dream-input" type="text" placeholder="Ước mơ của con..." value="Nhà khoa học vũ trụ" />
+          </div>
+        </div>
+
+        <div class="card" style="border-color:#FED7AA;">
+          <div class="card-title" style="color:var(--child);">❤️ Con thích gì nhất?</div>
+          <p style="font-size:13px;color:var(--gray-400);margin-bottom:12px;">Chọn những thứ làm con vui hoặc hứng thú:</p>
+          <div class="option-chips">
+            <div class="chip selected-c">🔭 Khoa học</div>
+            <div class="chip selected-c">🎨 Vẽ & sáng tạo</div>
+            <div class="chip">⚽ Thể thao</div>
+            <div class="chip selected-c">📚 Đọc sách</div>
+            <div class="chip">🎮 Game</div>
+            <div class="chip">🎵 Âm nhạc</div>
+            <div class="chip">🍳 Nấu ăn</div>
+            <div class="chip selected-c">🤖 Công nghệ</div>
+            <div class="chip">🌿 Thiên nhiên</div>
+          </div>
+        </div>
+
+        <div class="card" style="border-color:#FED7AA;">
+          <div class="card-title" style="color:var(--child);">💪 Con giỏi điều gì?</div>
+          <p style="font-size:13px;color:var(--gray-400);margin-bottom:12px;">Bạn bè hay khen con điều gì? Hoặc con tự thấy mình giỏi gì?</p>
+          <textarea class="input-field child-input" placeholder="VD: Con giỏi giải toán, con vẽ đẹp...">Con thích đặt câu hỏi và tìm hiểu tại sao mọi thứ hoạt động. Bạn bè hay nhờ con giải thích bài khoa học.</textarea>
+        </div>
+
+        <div class="card" style="border-color:#FED7AA;">
+          <div class="card-title" style="color:var(--child);">🎭 Con là người như thế nào?</div>
+          <div class="option-chips">
+            <div class="chip selected-c">Hay đặt câu hỏi</div>
+            <div class="chip">Thích làm việc nhóm</div>
+            <div class="chip selected-c">Thích một mình sáng tạo</div>
+            <div class="chip">Thích dẫn đầu</div>
+            <div class="chip selected-c">Thích giúp đỡ người khác</div>
+            <div class="chip">Thích cạnh tranh</div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-bar">
+        <button class="btn btn-child" onclick="goTo('screen-ai-processing')">GrowPath ơi, phân tích cho mình! ✨</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 7: AI PROCESSING -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-ai-processing">
+      <div class="ai-processing">
+        <div class="ai-spinner">✨</div>
+        <div class="ai-text">GrowPath đang khám phá bản sắc của Minh Anh</div>
+        <div class="ai-sub">Đang tổng hợp góc nhìn của Ba/Mẹ và những chia sẻ của con để tìm ra bức tranh thật sự về Minh Anh</div>
+        <div class="ai-dots">· · ·</div>
+        <div style="margin-top:32px;background:white;border-radius:16px;padding:16px;width:100%;box-shadow:var(--shadow);">
+          <div style="font-size:12px;color:var(--gray-400);text-align:center;">Đang phân tích</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;">
+            <div style="display:flex;align-items:center;gap:8px;"><span style="color:#10B981">✓</span><span style="font-size:13px;color:var(--gray-600);">Ước mơ và đam mê</span></div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="color:#10B981">✓</span><span style="font-size:13px;color:var(--gray-600);">Điểm mạnh và tính cách</span></div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="color:var(--parent)">⟳</span><span style="font-size:13px;color:var(--parent);font-weight:600;">Kết hợp góc nhìn Ba/Mẹ & con...</span></div>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="goTo('screen-persona-child')" style="margin-top:24px;width:100%;">Xem kết quả →</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 8: PERSONA REVEAL — CHILD VIEW -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-persona-child">
+      <div class="reveal-bg">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div class="tag tag-ai" style="background:rgba(255,255,255,0.2);color:white;border:1px solid rgba(255,255,255,0.4);">✨ Bản sắc của con</div>
+          <span style="font-size:20px;">🎉</span>
+        </div>
+        <div class="reveal-title">Minh Anh, đây là con! 🌟</div>
+        <div class="reveal-sub">GrowPath đã khám phá ra điều đặc biệt ở con</div>
+
+        <div class="persona-card" style="overflow-y:auto;">
+          <div style="text-align:center;margin-bottom:20px;">
+            <div style="font-size:48px;">🚀</div>
+            <div class="persona-name">Nguyễn Minh Anh</div>
+            <div class="persona-headline">Nhà khám phá tò mò — người đặt câu hỏi để thay đổi thế giới</div>
+          </div>
+
+          <div class="persona-dim">
+            <div class="dim-label">⭐ Ước mơ</div>
+            <div class="dim-tags">
+              <span class="dim-tag" style="background:#FEF3C7;color:#92400E;">Nhà khoa học vũ trụ</span>
+              <span class="dim-tag" style="background:#EDE9FE;color:#5B21B6;">Khám phá bí ẩn của vũ trụ</span>
+            </div>
+          </div>
+
+          <div class="persona-dim">
+            <div class="dim-label">❤️ Đam mê</div>
+            <div class="dim-tags">
+              <span class="dim-tag" style="background:#FEE2E2;color:#991B1B;">Khoa học</span>
+              <span class="dim-tag" style="background:#DBEAFE;color:#1E40AF;">Công nghệ</span>
+              <span class="dim-tag" style="background:#D1FAE5;color:#065F46;">Sáng tạo</span>
+              <span class="dim-tag" style="background:#FDF2F8;color:#9D174D;">Đọc sách</span>
+            </div>
+          </div>
+
+          <div class="persona-dim">
+            <div class="dim-label">💪 Điểm mạnh</div>
+            <div class="dim-value">Con có khả năng tư duy phân tích và tò mò thiên bẩm. Con giỏi giải thích những khái niệm phức tạp cho người khác hiểu.</div>
+          </div>
+
+          <div class="persona-dim">
+            <div class="dim-label">🎭 Tính cách</div>
+            <div class="dim-tags">
+              <span class="dim-tag" style="background:#EEF2FF;color:#4338CA;">Hay đặt câu hỏi</span>
+              <span class="dim-tag" style="background:#F0FDF4;color:#166534;">Thích giúp đỡ</span>
+              <span class="dim-tag" style="background:#FFF7ED;color:#9A3412;">Độc lập sáng tạo</span>
+            </div>
+          </div>
+
+          <div class="persona-dim">
+            <div class="dim-label">🌱 Con đang lớn lên qua</div>
+            <div class="dim-value">Kiên nhẫn với những thử thách dài hạn và tổ chức thời gian tốt hơn</div>
+          </div>
+        </div>
+
+        <button class="btn" onclick="goTo('screen-dream')" style="background:white;color:var(--parent);font-size:16px;font-weight:700;padding:16px;border-radius:16px;margin-top:16px;flex-shrink:0;">
+          Bắt đầu hành trình của mình! 🚀
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 9: PERSONA REVEAL — PARENT VIEW -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-persona-parent">
+      <div class="reveal-bg" style="background:linear-gradient(160deg,#4F46E5 0%,#7C3AED 60%,#0F766E 100%);">
+        <div class="tag tag-parent" style="background:rgba(255,255,255,0.2);color:white;border:1px solid rgba(255,255,255,0.4);">Góc nhìn của Ba/Mẹ</div>
+        <div class="reveal-title" style="margin-top:8px;">Bản sắc của Minh Anh 🌟</div>
+        <div class="reveal-sub">Tổng hợp từ chia sẻ của Ba/Mẹ và Minh Anh</div>
+
+        <div class="persona-card" style="overflow-y:auto;">
+          <div style="text-align:center;margin-bottom:16px;">
+            <div style="font-size:40px;">🚀</div>
+            <div class="persona-name">Nguyễn Minh Anh</div>
+            <div class="persona-headline">Nhà khám phá tò mò — người đặt câu hỏi để thay đổi thế giới</div>
+          </div>
+
+          <div class="persona-dim">
+            <div class="dim-label">💪 Điểm mạnh</div>
+            <div class="dim-value">Tư duy phân tích, khả năng sáng tạo và thiên năng kể chuyện phức tạp thành đơn giản.</div>
+          </div>
+          <div class="persona-dim">
+            <div class="dim-label">⭐ Ước mơ</div>
+            <div class="dim-value">Trở thành nhà khoa học vũ trụ — khám phá những bí ẩn lớn nhất của vũ trụ.</div>
+          </div>
+          <div class="persona-dim">
+            <div class="dim-label">🌱 Cần phát triển thêm</div>
+            <div class="dim-value">Kiên nhẫn và tổ chức — những kỹ năng thiết yếu cho nghiên cứu khoa học dài hạn.</div>
+          </div>
+
+          <!-- DELTA SECTION — PARENT ONLY -->
+          <div class="delta-section">
+            <div class="delta-title">💡 Điểm khác biệt thú vị</div>
+            <div class="delta-text">
+              Ba/Mẹ thấy con thiên về <strong>tư duy logic và toán học</strong>, trong khi Minh Anh cũng nhấn mạnh <strong>sáng tạo và nghệ thuật</strong>. GrowPath gợi ý: hãy thử nói chuyện với con về khoa học thị giác hoặc thiết kế vũ trụ — có thể đây là điểm kết hợp thú vị! 🎨🔭
+            </div>
+          </div>
+        </div>
+
+        <button class="btn" onclick="goTo('screen-parent-home')" style="background:white;color:var(--parent);font-size:16px;font-weight:700;padding:16px;border-radius:16px;margin-top:16px;flex-shrink:0;">
+          Xem hành trình của con →
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 10: DREAM NAMING (CHILD) -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-dream">
+      <div class="app-header">
+        <button class="back-btn" onclick="goTo('screen-persona-child')">←</button>
+        <span class="header-title">Ước mơ của con</span>
+      </div>
+      <div class="screen-body">
+        <div style="font-size:18px;font-weight:800;color:var(--gray-800);margin-bottom:6px;">Con muốn trở thành ai? 🌠</div>
+        <div style="font-size:14px;color:var(--gray-400);margin-bottom:24px;">Không giới hạn — bất kỳ ước mơ nào cũng được!</div>
+
+        <div class="dream-input-wrap">
+          <div class="dream-icon">🚀</div>
+          <input class="dream-input child-input" type="text" value="Nhà khoa học vũ trụ" />
+          <div style="font-size:12px;color:#D97706;margin-top:8px;">Nhấn để chỉnh sửa</div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <div style="font-size:14px;font-weight:700;color:var(--gray-600);margin-bottom:12px;">Hoặc khám phá thêm ý tưởng:</div>
+          <div class="option-chips">
+            <div class="chip">👩‍⚕️ Bác sĩ</div>
+            <div class="chip">🎮 Game Developer</div>
+            <div class="chip">🎨 Hoạ sĩ</div>
+            <div class="chip">✈️ Phi công</div>
+            <div class="chip">🏗️ Kiến trúc sư</div>
+            <div class="chip">📱 Kỹ sư phần mềm</div>
+            <div class="chip">🎬 Đạo diễn phim</div>
+            <div class="chip">🔬 Nhà nghiên cứu</div>
+          </div>
+        </div>
+
+        <div style="background:#F0FDF4;border-radius:16px;padding:16px;border:1.5px solid #BBF7D0;">
+          <div style="font-size:12px;font-weight:700;color:#166534;margin-bottom:6px;">💬 GrowPath nói:</div>
+          <div style="font-size:13px;color:#15803D;line-height:1.5;">"Nhà khoa học vũ trụ" là một ước mơ tuyệt vời! Con sẽ cần toán học, vật lý, và rất nhiều sự tò mò — mà con đã có rồi! 🌟</div>
+        </div>
+      </div>
+      <div class="bottom-bar">
+        <button class="btn btn-child" onclick="goTo('screen-career-clusters')">GrowPath ơi, gợi ý cho mình! ✨</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 11: CAREER CLUSTERS -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-career-clusters">
+      <div class="app-header">
+        <button class="back-btn" onclick="goTo('screen-dream')">←</button>
+        <span class="header-title">Hướng đi cho con</span>
+      </div>
+      <div class="screen-body">
+        <div style="background:#F0F9FF;border-radius:16px;padding:14px;margin-bottom:20px;border:1.5px solid #BAE6FD;">
+          <div style="font-size:12px;font-weight:700;color:#0369A1;margin-bottom:4px;">🤖 GrowPath gợi ý — dựa trên bản sắc của Minh Anh</div>
+          <div style="font-size:13px;color:#0C4A6E;line-height:1.5;">Từ ước mơ "Nhà khoa học vũ trụ" và bản sắc của con, đây là 3 hướng đi phù hợp nhất:</div>
+        </div>
+
+        <div class="section-header">Chọn hướng đi của con</div>
+        <div class="section-sub">Con có thể thay đổi bất cứ lúc nào</div>
+
+        <div class="career-card selected" onclick="selectCareer(this)">
+          <div class="career-icon">🔭</div>
+          <div class="career-title">Nhà thiên văn học & Vật lý vũ trụ</div>
+          <div class="career-desc">Nghiên cứu các thiên thể, khám phá nguồn gốc vũ trụ và tìm kiếm sự sống ngoài Trái Đất.</div>
+          <div class="career-skills">
+            <span class="skill-tag">Toán học</span>
+            <span class="skill-tag">Vật lý</span>
+            <span class="skill-tag">Lập trình</span>
+            <span class="skill-tag">Tiếng Anh</span>
+          </div>
+        </div>
+
+        <div class="career-card" onclick="selectCareer(this)">
+          <div class="career-icon">🛸</div>
+          <div class="career-title">Kỹ sư Hàng không Vũ trụ</div>
+          <div class="career-desc">Thiết kế và xây dựng tàu vũ trụ, tên lửa và các công nghệ khám phá không gian.</div>
+          <div class="career-skills">
+            <span class="skill-tag">Cơ học</span>
+            <span class="skill-tag">Kỹ thuật</span>
+            <span class="skill-tag">CAD Design</span>
+            <span class="skill-tag">Vật lý</span>
+          </div>
+        </div>
+
+        <div class="career-card" onclick="selectCareer(this)">
+          <div class="career-icon">🤖</div>
+          <div class="career-title">Nhà khoa học dữ liệu vũ trụ</div>
+          <div class="career-desc">Phân tích dữ liệu khổng lồ từ kính thiên văn và tàu thăm dò để tìm ra những khám phá mới.</div>
+          <div class="career-skills">
+            <span class="skill-tag">Lập trình Python</span>
+            <span class="skill-tag">AI & Machine Learning</span>
+            <span class="skill-tag">Thống kê</span>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-bar">
+        <button class="btn btn-child" onclick="goTo('screen-skill-roadmap')">Bắt đầu hành trình! 🚀</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 12: SKILL ROADMAP -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-skill-roadmap">
+      <div class="app-header">
+        <button class="back-btn" onclick="goTo('screen-career-clusters')">←</button>
+        <span class="header-title">Hành trình kỹ năng</span>
+      </div>
+      <div style="padding:0 24px 12px;">
+        <div style="background:linear-gradient(135deg,#FFF7ED,#FEF3C7);border-radius:16px;padding:16px;margin-bottom:16px;">
+          <div style="font-size:13px;color:var(--child);font-weight:700;">🎯 Mục tiêu: Nhà thiên văn học & Vật lý vũ trụ</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+            <div style="flex:1;height:8px;background:var(--gray-200);border-radius:4px;"><div style="width:12%;height:100%;background:linear-gradient(90deg,var(--child),#FBBF24);border-radius:4px;"></div></div>
+            <div style="font-size:12px;color:var(--gray-500);font-weight:600;">Tuần 2/52</div>
+          </div>
+        </div>
+      </div>
+      <div class="screen-body" style="padding-top:0;">
+
+        <div class="roadmap-quarter">
+          <div class="quarter-label">📍 Tuần này — Đang làm</div>
+          <div class="skill-item" style="border-color:var(--child);background:#FFF7ED;">
+            <div class="skill-progress-ring" style="background:var(--child-light);color:var(--child);">75%</div>
+            <div class="skill-info">
+              <div class="skill-name">Toán học tư duy</div>
+              <div class="skill-desc">Luyện giải toán logic và đố vui</div>
+              <div class="skill-bar"><div class="skill-bar-fill" style="width:75%"></div></div>
+            </div>
+            <span style="font-size:20px;">🔥</span>
+          </div>
+        </div>
+
+        <div class="roadmap-quarter">
+          <div class="quarter-label">📅 Tháng này</div>
+          <div class="skill-item">
+            <div class="skill-progress-ring" style="background:#EEF2FF;color:var(--parent);">30%</div>
+            <div class="skill-info">
+              <div class="skill-name">Khoa học tự nhiên</div>
+              <div class="skill-desc">Thí nghiệm & quan sát hiện tượng</div>
+              <div class="skill-bar"><div class="skill-bar-fill" style="width:30%;background:var(--parent);"></div></div>
+            </div>
+            <span style="font-size:20px;">🔬</span>
+          </div>
+          <div class="skill-item">
+            <div class="skill-progress-ring" style="background:#F0FDF4;color:#16A34A;">10%</div>
+            <div class="skill-info">
+              <div class="skill-name">Tiếng Anh khoa học</div>
+              <div class="skill-desc">Từ vựng và đọc hiểu khoa học</div>
+              <div class="skill-bar"><div class="skill-bar-fill" style="width:10%;background:#16A34A;"></div></div>
+            </div>
+            <span style="font-size:20px;">🌍</span>
+          </div>
+        </div>
+
+        <div class="roadmap-quarter">
+          <div class="quarter-label">🗓️ Quý này (Q2 2026)</div>
+          <div class="skill-item" style="opacity:0.6;">
+            <div class="skill-progress-ring" style="background:var(--gray-100);color:var(--gray-400);">0%</div>
+            <div class="skill-info">
+              <div class="skill-name">Lập trình Python cơ bản</div>
+              <div class="skill-desc">Bắt đầu sau 4 tuần</div>
+            </div>
+            <span style="font-size:16px;color:var(--gray-300);">🔒</span>
+          </div>
+          <div class="skill-item" style="opacity:0.6;">
+            <div class="skill-progress-ring" style="background:var(--gray-100);color:var(--gray-400);">0%</div>
+            <div class="skill-info">
+              <div class="skill-name">Kiên nhẫn & Kế hoạch</div>
+              <div class="skill-desc">Thử thách 30 ngày</div>
+            </div>
+            <span style="font-size:16px;color:var(--gray-300);">🔒</span>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab-item active-child" onclick="goTo('screen-child-home')"><span class="tab-icon">🏠</span><span class="tab-label" style="color:var(--child);">Trang chủ</span></div>
+        <div class="tab-item active-child"><span class="tab-icon">🗺️</span><span class="tab-label" style="color:var(--child);">Hành trình</span></div>
+        <div class="tab-item" onclick="goTo('screen-checkin')"><span class="tab-icon">✅</span><span class="tab-label">Điểm danh</span></div>
+        <div class="tab-item"><span class="tab-icon">🏆</span><span class="tab-label">Thành tích</span></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 13: CHILD HOME -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-child-home">
+      <div class="child-hero">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+          <div style="width:44px;height:44px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:var(--shadow);">🚀</div>
+          <div>
+            <div class="child-hero-greeting">Xin chào, Minh Anh! 👋</div>
+            <div class="child-hero-sub">Thứ Sáu, 1/5/2026</div>
+          </div>
+        </div>
+        <div style="background:white;border-radius:14px;padding:14px;margin-bottom:12px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);">
+          <span style="font-size:24px;">🔥</span>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--gray-800);">Chuỗi 7 ngày liên tiếp!</div>
+            <div style="font-size:12px;color:var(--gray-400);">Con đang học rất đều đặn</div>
+          </div>
+          <span style="margin-left:auto;font-size:24px;">⭐</span>
+        </div>
+        <div class="xp-bar-wrap">
+          <div class="xp-label"><span>Kinh nghiệm tuần này</span><span>340 / 500 XP</span></div>
+          <div class="xp-bar"><div class="xp-fill" style="width:68%"></div></div>
+        </div>
+      </div>
+
+      <div style="padding:0 20px 0;">
+        <div style="background:linear-gradient(135deg,var(--child),#FBBF24);border-radius:20px;padding:20px;margin-bottom:16px;color:white;">
+          <div style="font-size:13px;font-weight:700;opacity:0.85;margin-bottom:6px;">📋 Việc hôm nay</div>
+          <div style="font-size:17px;font-weight:800;margin-bottom:4px;">Điểm danh tuần — Toán tư duy</div>
+          <div style="font-size:13px;opacity:0.85;">15 phút • Hãy thử thách não bộ nhé!</div>
+          <button onclick="goTo('screen-checkin')" style="margin-top:14px;background:white;color:var(--child);border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;">Bắt đầu ngay →</button>
+        </div>
+
+        <div style="font-size:16px;font-weight:800;color:var(--gray-800);margin-bottom:12px;">Kỹ năng đang luyện</div>
+        <div class="skill-item" style="margin-bottom:8px;">
+          <div style="font-size:28px;">🧮</div>
+          <div class="skill-info">
+            <div class="skill-name">Toán học tư duy</div>
+            <div class="skill-desc">75% hoàn thành • Cấp 2</div>
+            <div class="skill-bar"><div class="skill-bar-fill" style="width:75%"></div></div>
+          </div>
+        </div>
+        <div class="skill-item">
+          <div style="font-size:28px;">🔬</div>
+          <div class="skill-info">
+            <div class="skill-name">Khoa học tự nhiên</div>
+            <div class="skill-desc">30% hoàn thành • Cấp 1</div>
+            <div class="skill-bar"><div class="skill-bar-fill" style="width:30%;background:var(--parent);"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-bar">
+        <div class="tab-item active-child"><span class="tab-icon">🏠</span><span class="tab-label" style="color:var(--child);">Trang chủ</span></div>
+        <div class="tab-item" onclick="goTo('screen-skill-roadmap')"><span class="tab-icon">🗺️</span><span class="tab-label">Hành trình</span></div>
+        <div class="tab-item" onclick="goTo('screen-checkin')"><span class="tab-icon">✅</span><span class="tab-label">Điểm danh</span></div>
+        <div class="tab-item"><span class="tab-icon">🏆</span><span class="tab-label">Thành tích</span></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 14: WEEKLY CHECK-IN (CHILD) -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-checkin">
+      <div class="app-header">
+        <button class="back-btn" onclick="goTo('screen-child-home')">←</button>
+        <span class="header-title">Điểm danh tuần 2</span>
+      </div>
+      <div class="screen-body">
+        <div style="background:linear-gradient(135deg,#FFF7ED,#FEF9C3);border-radius:16px;padding:16px;margin-bottom:20px;">
+          <div style="font-size:14px;font-weight:700;color:var(--child);">🧮 Toán học tư duy</div>
+          <div style="font-size:13px;color:var(--gray-500);margin-top:2px;">Con đã làm gì tuần này?</div>
+        </div>
+
+        <div style="font-size:15px;font-weight:700;color:var(--gray-700);margin-bottom:12px;">Con cảm thấy thế nào?</div>
+        <div class="checkin-emoji-grid">
+          <div class="emoji-option selected" onclick="selectEmoji(this)"><span>😄</span><span>Tuyệt vời</span></div>
+          <div class="emoji-option" onclick="selectEmoji(this)"><span>🙂</span><span>Ổn</span></div>
+          <div class="emoji-option" onclick="selectEmoji(this)"><span>😤</span><span>Khó khăn</span></div>
+          <div class="emoji-option" onclick="selectEmoji(this)"><span>😴</span><span>Chán nản</span></div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Con đã làm gì để luyện kỹ năng này?</label>
+          <textarea class="input-field child-input" placeholder="Kể cho GrowPath nghe...">Mình giải 15 bài toán đố và học về dãy Fibonacci. Bài về xác suất hơi khó nhưng mình đã hiểu sau khi xem video.</textarea>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Con học được điều gì mới?</label>
+          <textarea class="input-field child-input" placeholder="Một điều thú vị con khám phá được...">Dãy Fibonacci xuất hiện trong thiên nhiên — ốc sên, cánh hoa... Mình muốn tìm hiểu xem có xuất hiện trong vũ trụ không!</textarea>
+        </div>
+
+        <div style="background:#EFF6FF;border-radius:14px;padding:14px;margin-bottom:8px;">
+          <div style="font-size:12px;font-weight:700;color:#1D4ED8;margin-bottom:6px;">🤔 Tình huống tuần này</div>
+          <div style="font-size:13px;color:#1E40AF;line-height:1.6;">Nếu con phải giải thích "tại sao các ngôi sao ở xa lại trông nhỏ hơn" cho một người bạn 6 tuổi — con sẽ nói gì? 🌟</div>
+          <textarea class="input-field child-input" placeholder="Câu trả lời của con..." style="margin-top:10px;min-height:60px;">Giống như đèn pin — khi để xa thì ánh sáng nhỏ lại, nhưng đèn vẫn sáng như cũ thôi!</textarea>
+        </div>
+      </div>
+      <div class="bottom-bar">
+        <button class="btn btn-child" onclick="goTo('screen-milestone')">Nộp bài! 🎉</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 15: MILESTONE CELEBRATION -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-milestone">
+      <div class="milestone-bg">
+        <div class="milestone-confetti" id="confetti"></div>
+        <div class="milestone-badge">⭐</div>
+        <div class="milestone-title">Xuất sắc, Minh Anh!</div>
+        <div class="milestone-desc">Con vừa hoàn thành <strong>Tuần 2</strong> của hành trình "Nhà thiên văn học"!<br/><br/>Câu trả lời về ánh sáng của con thật sáng tạo 🌟</div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:20px;padding:16px;width:100%;margin-bottom:24px;text-align:left;">
+          <div style="font-size:13px;color:rgba(255,255,255,0.9);font-weight:700;margin-bottom:8px;">Con đã đạt được:</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.85);line-height:1.8;">
+            ⭐ +120 XP Toán học tư duy<br/>
+            🔬 Mở khoá: Khoa học tự nhiên Cấp 2<br/>
+            🏅 Huy hiệu "Người giải thích giỏi"
+          </div>
+        </div>
+        <button class="milestone-share" onclick="goTo('screen-child-home')">Tiếp tục hành trình! 🚀</button>
+        <button class="milestone-continue" onclick="goTo('screen-parent-digest')">Xem Ba/Mẹ nói gì</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 16: PARENT HOME -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-parent-home">
+      <div style="background:linear-gradient(135deg,#EEF2FF,white);padding:20px 24px 16px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <div style="width:44px;height:44px;border-radius:50%;background:var(--parent-light);display:flex;align-items:center;justify-content:center;font-size:22px;">👩</div>
+          <div>
+            <div style="font-size:17px;font-weight:800;color:var(--gray-800);">Xin chào, chị Hương!</div>
+            <div style="font-size:13px;color:var(--gray-400);">Thứ Sáu, 1/5/2026</div>
+          </div>
+          <div style="margin-left:auto;"><span class="notif-badge">1</span></div>
+        </div>
+      </div>
+
+      <div style="padding:0 20px;">
+        <div class="digest-child-row">
+          <div style="width:46px;height:46px;border-radius:50%;background:var(--child-light);display:flex;align-items:center;justify-content:center;font-size:24px;">🚀</div>
+          <div class="digest-child-info">
+            <div class="digest-child-name">Minh Anh</div>
+            <div class="digest-child-status">🔥 Chuỗi 7 ngày • 75% Toán tư duy</div>
+          </div>
+          <button onclick="goTo('screen-parent-digest')" style="padding:8px 14px;background:var(--parent);color:white;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;">Xem →</button>
+        </div>
+
+        <div style="background:#FEF9C3;border:1.5px solid #FDE68A;border-radius:16px;padding:16px;margin-bottom:16px;">
+          <div style="font-size:13px;font-weight:700;color:#92400E;margin-bottom:6px;">💡 Gợi ý từ GrowPath</div>
+          <div style="font-size:13px;color:#78350F;line-height:1.5;">Minh Anh đang học về Fibonacci! Đây là cơ hội để nói chuyện với con về toán học trong thiên nhiên — có thể cùng đi quan sát hoa hoặc ốc sên cuối tuần này không? 🌸</div>
+        </div>
+
+        <div style="font-size:16px;font-weight:800;color:var(--gray-800);margin-bottom:12px;">Tuần này của Minh Anh</div>
+        <div class="skill-item" style="margin-bottom:8px;">
+          <span style="font-size:28px;">🧮</span>
+          <div class="skill-info">
+            <div class="skill-name">Toán học tư duy</div>
+            <div class="skill-desc">+15% tuần này • Xuất sắc!</div>
+            <div class="skill-bar"><div class="skill-bar-fill" style="width:75%"></div></div>
+          </div>
+          <span style="color:#10B981;font-weight:700;font-size:14px;">↑15%</span>
+        </div>
+      </div>
+
+      <div class="tab-bar">
+        <div class="tab-item active"><span class="tab-icon">🏠</span><span class="tab-label" style="color:var(--parent);">Trang chủ</span></div>
+        <div class="tab-item" onclick="goTo('screen-parent-digest')"><span class="tab-icon">📊</span><span class="tab-label">Báo cáo</span></div>
+        <div class="tab-item" onclick="goTo('screen-persona-parent')"><span class="tab-icon">🌟</span><span class="tab-label">Bản sắc</span></div>
+        <div class="tab-item"><span class="tab-icon">⚙️</span><span class="tab-label">Cài đặt</span></div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 17: PARENT WEEKLY DIGEST -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-parent-digest">
+      <div class="app-header">
+        <button class="back-btn" onclick="goTo('screen-parent-home')">←</button>
+        <span class="header-title">Báo cáo tuần 2 — Minh Anh</span>
+      </div>
+      <div class="screen-body">
+        <div class="digest-stat-row">
+          <div class="digest-stat"><div class="stat-value">7</div><div class="stat-label">ngày liên tiếp</div></div>
+          <div class="digest-stat"><div class="stat-value">340</div><div class="stat-label">XP tuần này</div></div>
+          <div class="digest-stat"><div class="stat-value">2</div><div class="stat-label">kỹ năng đang học</div></div>
+          <div class="digest-stat"><div class="stat-value">+15%</div><div class="stat-label" style="color:#10B981;">tiến bộ</div></div>
+        </div>
+
+        <div class="card" style="border-color:#D1FAE5;">
+          <div class="card-title" style="color:#065F46;">✨ Điểm nổi bật tuần này</div>
+          <div style="font-size:14px;color:var(--gray-600);line-height:1.7;">Minh Anh học được về <strong>dãy Fibonacci</strong> và tự tìm ra sự kết nối với thiên nhiên. Câu giải thích về ánh sáng sao rất sáng tạo — cho thấy con đang hình thành tư duy <em>khoa học thực tiễn</em>.</div>
+        </div>
+
+        <div class="conv-starter">
+          <div class="conv-label">💬 Gợi ý chủ đề nói chuyện</div>
+          <div class="conv-text">"Minh Anh ơi, Ba/Mẹ nghe nói con học về dãy Fibonacci — con thấy nó xuất hiện ở đâu trong vũ trụ không? Mình cùng tìm hiểu nhé?"</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🌱 Điểm cần hỗ trợ</div>
+          <div style="font-size:14px;color:var(--gray-600);line-height:1.6;">Con vẫn đang rèn luyện <strong>kiên nhẫn với bài khó</strong>. Khi gặp bài xác suất, con cần xem video hỗ trợ thêm — điều này là bình thường! Tuần tới hãy thử giải bài khó trước rồi mới xem gợi ý.</div>
+        </div>
+
+        <div class="card" style="border-left:4px solid var(--parent);">
+          <div class="card-title">📅 Tuần tới</div>
+          <div style="font-size:14px;color:var(--gray-600);line-height:1.6;">Con sẽ bắt đầu <strong>Khoa học tự nhiên Cấp 2</strong> và có một tình huống về việc thiết kế thí nghiệm đơn giản tại nhà. Ba/Mẹ có thể chuẩn bị nguyên vật liệu nhỏ không?</div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab-item" onclick="goTo('screen-parent-home')"><span class="tab-icon">🏠</span><span class="tab-label">Trang chủ</span></div>
+        <div class="tab-item active"><span class="tab-icon">📊</span><span class="tab-label" style="color:var(--parent);">Báo cáo</span></div>
+        <div class="tab-item" onclick="goTo('screen-persona-parent')"><span class="tab-icon">🌟</span><span class="tab-label">Bản sắc</span></div>
+        <div class="tab-item"><span class="tab-icon">⚙️</span><span class="tab-label">Cài đặt</span></div>
+      </div>
+    </div>
+
+  </div><!-- end .device -->
+
+  <!-- NAVIGATION CONTROLS -->
+  <div class="nav-controls">
+    <div class="nav-title">Chọn màn hình để xem</div>
+
+    <div class="flow-section">
+      <span class="flow-label">🚀 Khởi đầu</span>
+      <div class="flow-buttons">
+        <button class="nav-btn active" onclick="goTo('screen-splash')">Màn hình chào</button>
+      </div>
+    </div>
+
+    <div class="flow-section">
+      <span class="flow-label">👩 Luồng Phụ huynh</span>
+      <div class="flow-buttons">
+        <button class="nav-btn" onclick="goTo('screen-parent-signup')">Đăng ký</button>
+        <button class="nav-btn" onclick="goTo('screen-add-child')">Thêm hồ sơ con</button>
+        <button class="nav-btn" onclick="goTo('screen-parent-discovery')">Khám phá bản sắc</button>
+        <button class="nav-btn" onclick="goTo('screen-waiting-child')">Chờ con điền</button>
+        <button class="nav-btn" onclick="goTo('screen-persona-parent')">Bản sắc (Ba/Mẹ xem)</button>
+        <button class="nav-btn" onclick="goTo('screen-parent-home')">Trang chủ Ba/Mẹ</button>
+        <button class="nav-btn" onclick="goTo('screen-parent-digest')">Báo cáo tuần</button>
+      </div>
+    </div>
+
+    <div class="flow-section">
+      <span class="flow-label">🧒 Luồng của Con</span>
+      <div class="flow-buttons">
+        <button class="nav-btn child-btn" onclick="goTo('screen-child-discovery')">Con điền bản sắc</button>
+        <button class="nav-btn child-btn" onclick="goTo('screen-ai-processing')">AI đang phân tích</button>
+        <button class="nav-btn child-btn" onclick="goTo('screen-persona-child')">Bản sắc (Con xem)</button>
+        <button class="nav-btn child-btn" onclick="goTo('screen-dream')">Đặt tên ước mơ</button>
+        <button class="nav-btn child-btn" onclick="goTo('screen-career-clusters')">Hướng nghề nghiệp</button>
+        <button class="nav-btn child-btn" onclick="goTo('screen-skill-roadmap')">Lộ trình kỹ năng</button>
+        <button class="nav-btn child-btn" onclick="goTo('screen-child-home')">Trang chủ Con</button>
+        <button class="nav-btn child-btn" onclick="goTo('screen-checkin')">Điểm danh tuần</button>
+        <button class="nav-btn child-btn" onclick="goTo('screen-milestone')">Ăn mừng cột mốc 🎉</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .device-wrapper -->
+
+<script>
+  const screens = document.querySelectorAll('.screen');
+  const navBtns = document.querySelectorAll('.nav-btn');
+
+  function goTo(screenId) {
+    screens.forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+
+    navBtns.forEach(b => {
+      b.classList.remove('active');
+      const onclick = b.getAttribute('onclick');
+      if (onclick && onclick.includes(screenId)) {
+        b.classList.add('active');
+      }
+    });
+
+    // Scroll device to top
+    document.getElementById(screenId).scrollTop = 0;
+  }
+
+  function selectCareer(el) {
+    document.querySelectorAll('.career-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function selectEmoji(el) {
+    document.querySelectorAll('.emoji-option').forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  // Confetti
+  function createConfetti() {
+    const container = document.getElementById('confetti');
+    if (!container) return;
+    const colors = ['#F97316','#FBBF24','#818CF8','#EC4899','#10B981','#60A5FA'];
+    for (let i = 0; i < 30; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'confetti-dot';
+      dot.style.left = Math.random() * 100 + '%';
+      dot.style.background = colors[Math.floor(Math.random() * colors.length)];
+      dot.style.animationDelay = Math.random() * 3 + 's';
+      dot.style.animationDuration = (2 + Math.random() * 2) + 's';
+      container.appendChild(dot);
+    }
+  }
+  createConfetti();
+</script>
+
+</body>
+</html>
