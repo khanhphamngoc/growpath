@@ -139,6 +139,16 @@ Persona Discovery → Dream + Career Path → Skill Journey → Weekly Ritual �
 - Scalability, Extendability, Security, Observability are among important quality metrics must have
 - Take TDD, DDD approach
 
+## Implementation workflow
+Adopt TDD pratices where
+1. Write the test which should failed -> RED
+2. Implement the code to make the tests passed
+3. Run the tests and ensure they all passes -> GREEN
+
+## Documentation
+- Ensure documents are up-to-date
+- Ensure the mockup is aligned with the implementation and vice-versa
+
 ---
 
 ## Market
