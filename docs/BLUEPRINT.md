@@ -107,7 +107,8 @@ Persona Discovery → Dream + Career Path → Skill Journey → Weekly Ritual �
 | API Gateway | Next.js API routes (MVP) → Kong / AWS API Gateway (scale) |
 | Cache | Redis (Docker local → AWS ElastiCache) |
 | AI Job Queue | BullMQ + Redis |
-| AI | Claude API — Sonnet (synthesis) + Haiku (nudges) |
+| AI (production) | Claude API — Sonnet 4.6 (synthesis) + Haiku 4.5 (nudges) |
+| AI (local dev) | Ollama — qwen2.5:7b (synthesis) + llama3.2:3b (nudges) |
 | Observability | OpenTelemetry + Prometheus + Grafana + Jaeger |
 | Logging | Pino (structured) → ELK / Grafana Loki |
 | Hosting | Vercel (frontend) → AWS (production) |
@@ -115,6 +116,28 @@ Persona Discovery → Dream + Career Path → Skill Journey → Weekly Ritual �
 | Cloud | AWS first, GCP second |
 
 **Local dev:** Full stack via Docker Compose — all free, zero vendor lock-in.
+
+## Standards & Compliance
+- **Safety:** Strict TypeScript. Zero `any`. No `@ts-ignore`.
+- **Security:** Sanitize all inputs. Use OWASP Top 10 as a mental checklist.
+- **Audit:** All sensitive mutations must log to an audit trail.
+- **Testing:** 90% coverage for `@/core` and `@/lib`. Use Vitest + Playwright.
+
+## Architectural Patterns
+- **Clean Architecture:** Separate Business Logic (Services) from Framework Logic (Controllers/Routes).
+- **Domain Driven Design:** Organize by domain (e.g., `Accounts`, `Transactions`, `Users`).
+- **Idempotency:** All Server Actions must be idempotent to handle network retries safely.
+
+## Interaction Protocol
+- **Loom Check:** Propose a technical design before writing more than 50 lines of code.
+- **Dependency Guard:** Do not add new `npm` packages without justifying the bundle size impact.
+
+## Engineering Best Practices
+- Follow best practices such as SOLID, DRY, KISS
+- Code must be covered by comprehensive tests
+- Self-explanation code, only write comments where really need to explain the WHY
+- Scalability, Extendability, Security, Observability are among important quality metrics must have
+- Take TDD, DDD approach
 
 ---
 

@@ -724,8 +724,57 @@
         <div class="splash-logo">🌱 GrowPath</div>
         <div class="splash-tagline">Hành trình phát triển của con — được xây dựng cùng nhau</div>
         <button class="splash-cta" onclick="goTo('screen-parent-signup')">Bắt đầu hành trình</button>
-        <button class="splash-login" onclick="goTo('screen-parent-home')">Đã có tài khoản? Đăng nhập</button>
+        <button class="splash-login" onclick="goTo('screen-parent-philosophy')">Đã có tài khoản? Đăng nhập</button>
         <div class="splash-badge">🇻🇳 Dành cho gia đình Việt Nam</div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 1.5: PARENT PHILOSOPHY ONBOARDING -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-parent-philosophy">
+      <div style="flex:1;display:flex;flex-direction:column;background:linear-gradient(160deg,#EEF2FF,white);">
+        <div style="padding:40px 28px 20px;text-align:center;">
+          <div style="font-size:48px;margin-bottom:16px;">🌱</div>
+          <div class="tag tag-parent" style="margin-bottom:12px;">Trước khi bắt đầu</div>
+          <div style="font-size:22px;font-weight:800;color:var(--gray-800);margin-bottom:8px;">GrowPath hoạt động như thế nào</div>
+          <div style="font-size:14px;color:var(--gray-500);line-height:1.6;">Đây là những nguyên tắc giúp con trẻ cảm thấy an toàn khi nói thật với Ba/Mẹ.</div>
+        </div>
+        <div style="padding:0 24px;flex:1;overflow-y:auto;">
+          <div style="background:white;border-radius:20px;padding:20px;margin-bottom:14px;border:1.5px solid var(--parent-light);box-shadow:var(--shadow);">
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <span style="font-size:28px;flex-shrink:0;">🔒</span>
+              <div>
+                <div style="font-size:15px;font-weight:700;color:var(--gray-800);margin-bottom:4px;">Câu trả lời thô của con là riêng tư</div>
+                <div style="font-size:13px;color:var(--gray-500);line-height:1.6;">Ba/Mẹ chỉ thấy bản tổng hợp từ AI — không bao giờ thấy lời con viết. Điều này giúp con dám nói thật.</div>
+              </div>
+            </div>
+          </div>
+          <div style="background:white;border-radius:20px;padding:20px;margin-bottom:14px;border:1.5px solid var(--parent-light);box-shadow:var(--shadow);">
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <span style="font-size:28px;flex-shrink:0;">💡</span>
+              <div>
+                <div style="font-size:15px;font-weight:700;color:var(--gray-800);margin-bottom:4px;">Góc nhìn của con được thử trước</div>
+                <div style="font-size:13px;color:var(--gray-500);line-height:1.6;">Khi Ba/Mẹ và con chưa đồng ý, GrowPath sẽ thử theo góc nhìn của con trước — rồi cùng nhau xem lại sau. <strong>Đây là cách chúng tôi giúp con mở lòng hơn với Ba/Mẹ.</strong></div>
+              </div>
+            </div>
+          </div>
+          <div style="background:white;border-radius:20px;padding:20px;margin-bottom:20px;border:1.5px solid var(--parent-light);box-shadow:var(--shadow);">
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <span style="font-size:28px;flex-shrink:0;">👁️</span>
+              <div>
+                <div style="font-size:15px;font-weight:700;color:var(--gray-800);margin-bottom:4px;">Ba/Mẹ luôn thấy toàn bộ bức tranh</div>
+                <div style="font-size:13px;color:var(--gray-500);line-height:1.6;">Ba/Mẹ sẽ thấy điểm khác biệt giữa hai góc nhìn, và luôn có tiếng nói cuối cùng trong hành trình của con.</div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#EEF2FF;border-radius:16px;padding:16px;margin-bottom:24px;">
+            <div style="font-size:13px;color:var(--parent);font-style:italic;line-height:1.6;text-align:center;">"GrowPath được thiết kế để con trẻ cảm thấy an toàn khi nói thật. Khi Ba/Mẹ và con chưa đồng ý, chúng tôi sẽ thử theo góc nhìn của con trước — rồi cùng nhau xem lại sau."</div>
+          </div>
+        </div>
+        <div style="padding:16px 24px 40px;border-top:1px solid var(--gray-100);">
+          <button class="btn btn-primary" onclick="goTo('screen-parent-home')">Tôi hiểu và đồng ý ✓</button>
+        </div>
       </div>
     </div>
 
@@ -887,8 +936,52 @@
           <div style="font-size:13px;color:var(--parent);font-weight:700;margin-bottom:8px;">📱 Hoặc mời con dùng ngay</div>
           <div style="font-size:13px;color:var(--gray-500);">Đưa điện thoại cho Minh Anh để con tự điền phần của mình</div>
         </div>
-        <button class="btn btn-primary" onclick="goTo('screen-child-discovery')" style="margin-bottom:12px;">Đưa cho con điền ngay →</button>
+        <button class="btn btn-primary" onclick="goTo('screen-child-privacy')" style="margin-bottom:12px;">Đưa cho con điền ngay →</button>
         <button class="btn btn-ghost" onclick="goTo('screen-parent-home')">Quay lại trang chủ</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SCREEN 5.5: CHILD PRIVACY DIAGRAM -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="screen" id="screen-child-privacy">
+      <div style="flex:1;display:flex;flex-direction:column;background:linear-gradient(135deg,#FFF7ED,#FEF3C7);">
+        <div style="padding:40px 28px 20px;text-align:center;">
+          <div style="font-size:48px;margin-bottom:16px;">🔒</div>
+          <div class="tag tag-child" style="margin-bottom:12px;">Trước khi bắt đầu</div>
+          <div style="font-size:22px;font-weight:800;color:var(--gray-800);margin-bottom:8px;">Câu trả lời của con là của con</div>
+          <div style="font-size:14px;color:var(--gray-500);line-height:1.5;">Đây là cách GrowPath bảo vệ những gì con chia sẻ.</div>
+        </div>
+        <div style="padding:0 28px;flex:1;">
+          <div style="background:white;border-radius:20px;padding:24px;margin-bottom:16px;box-shadow:var(--shadow);">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+              <div style="background:var(--child-light);border-radius:14px;padding:14px 20px;text-align:center;width:100%;border:2px solid #FED7AA;">
+                <div style="font-size:28px;margin-bottom:4px;">✍️</div>
+                <div style="font-size:15px;font-weight:700;color:var(--child);">Con viết ở đây</div>
+                <div style="font-size:12px;color:var(--gray-500);margin-top:2px;">Suy nghĩ thật của con</div>
+              </div>
+              <div style="font-size:22px;color:var(--gray-300);font-weight:700;">↓</div>
+              <div style="background:#EDE9FE;border-radius:14px;padding:14px 20px;text-align:center;width:100%;border:2px solid #DDD6FE;">
+                <div style="font-size:28px;margin-bottom:4px;">🤖</div>
+                <div style="font-size:15px;font-weight:700;color:#7C3AED;">AI đọc & tổng hợp</div>
+                <div style="font-size:12px;color:var(--gray-500);margin-top:2px;">Hiểu và diễn đạt lại</div>
+              </div>
+              <div style="font-size:22px;color:var(--gray-300);font-weight:700;">↓</div>
+              <div style="background:#D1FAE5;border-radius:14px;padding:14px 20px;text-align:center;width:100%;border:2px solid #A7F3D0;">
+                <div style="font-size:28px;margin-bottom:4px;">👨‍👩‍👧</div>
+                <div style="font-size:15px;font-weight:700;color:#065F46;">Ba/Mẹ chỉ thấy bản tóm tắt này</div>
+                <div style="font-size:12px;color:var(--gray-500);margin-top:2px;">Không bao giờ thấy lời con viết</div>
+              </div>
+            </div>
+          </div>
+          <div style="background:white;border-radius:16px;padding:16px;margin-bottom:24px;border-left:4px solid var(--child);">
+            <div style="font-size:14px;font-weight:700;color:var(--gray-800);margin-bottom:6px;">🤝 AI là người giúp con nói chuyện với Ba/Mẹ</div>
+            <div style="font-size:13px;color:var(--gray-500);line-height:1.6;">AI sẽ giúp con giải thích cho Ba/Mẹ hiểu con <strong>theo cách con muốn được hiểu</strong> — không phải báo cáo hay phán xét con.</div>
+          </div>
+        </div>
+        <div style="padding:16px 28px 40px;">
+          <button class="btn btn-child" onclick="goTo('screen-child-discovery')">Mình hiểu rồi — Bắt đầu nhé! ✨</button>
+        </div>
       </div>
     </div>
 
@@ -899,13 +992,20 @@
       <div style="background:linear-gradient(135deg,#FFF7ED,#FEF3C7);padding:20px 24px 16px;">
         <div class="tag tag-child">Dành cho con 🌟</div>
         <div style="font-size:22px;font-weight:800;color:var(--gray-800);margin-top:4px;">Xin chào Minh Anh!</div>
-        <div style="font-size:14px;color:var(--gray-500);margin-top:4px;">Không có câu trả lời đúng hay sai — chỉ có câu trả lời của con!</div>
+        <div style="font-size:14px;color:var(--gray-500);margin-top:4px;line-height:1.5;">Không có câu trả lời đúng hay sai — đây là về con, không phải về điểm số.</div>
         <div class="progress-bar" style="margin-top:12px;"><div class="progress-fill child" style="width:30%"></div></div>
       </div>
       <div class="screen-body">
+        <!-- AI as Advocate intro -->
+        <div style="background:white;border-radius:16px;padding:14px;margin-bottom:12px;border-left:4px solid var(--child);display:flex;gap:10px;align-items:flex-start;">
+          <span style="font-size:22px;flex-shrink:0;">🤝</span>
+          <div style="font-size:13px;color:var(--gray-600);line-height:1.6;">AI sẽ giúp con giải thích cho Ba/Mẹ hiểu con <strong>theo cách con muốn được hiểu</strong> — không phải báo cáo con.</div>
+        </div>
+
         <div class="card" style="border-color:#FED7AA;">
           <div class="card-title" style="color:var(--child);">⭐ Ước mơ của con</div>
-          <p style="font-size:14px;color:var(--gray-600);margin-bottom:16px;">Con muốn trở thành ai hoặc làm gì khi lớn lên? Đừng ngại — ước mơ nào cũng đẹp!</p>
+          <p style="font-size:13px;color:var(--gray-400);margin-bottom:6px;font-style:italic;">Không có câu trả lời đúng hay sai.</p>
+          <p style="font-size:14px;color:var(--gray-600);margin-bottom:16px;">Nếu không ai biết và không ai phán xét, con muốn thử công việc gì nhất? 🌠</p>
           <div class="dream-input-wrap">
             <div class="dream-icon">🌠</div>
             <input class="dream-input" type="text" placeholder="Ước mơ của con..." value="Nhà khoa học vũ trụ" />
@@ -914,7 +1014,8 @@
 
         <div class="card" style="border-color:#FED7AA;">
           <div class="card-title" style="color:var(--child);">❤️ Con thích gì nhất?</div>
-          <p style="font-size:13px;color:var(--gray-400);margin-bottom:12px;">Chọn những thứ làm con vui hoặc hứng thú:</p>
+          <p style="font-size:13px;color:var(--gray-400);margin-bottom:6px;font-style:italic;">Không có câu trả lời đúng hay sai.</p>
+          <p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;">Khi nào con quên mất cả giờ vì quá mê làm điều gì đó? Chọn những thứ đó:</p>
           <div class="option-chips">
             <div class="chip selected-c">🔭 Khoa học</div>
             <div class="chip selected-c">🎨 Vẽ & sáng tạo</div>
@@ -930,12 +1031,14 @@
 
         <div class="card" style="border-color:#FED7AA;">
           <div class="card-title" style="color:var(--child);">💪 Con giỏi điều gì?</div>
-          <p style="font-size:13px;color:var(--gray-400);margin-bottom:12px;">Bạn bè hay khen con điều gì? Hoặc con tự thấy mình giỏi gì?</p>
-          <textarea class="input-field child-input" placeholder="VD: Con giỏi giải toán, con vẽ đẹp...">Con thích đặt câu hỏi và tìm hiểu tại sao mọi thứ hoạt động. Bạn bè hay nhờ con giải thích bài khoa học.</textarea>
+          <p style="font-size:13px;color:var(--gray-400);margin-bottom:6px;font-style:italic;">Không có câu trả lời đúng hay sai.</p>
+          <p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;">Khi nào con cảm thấy tự tin nhất? Bạn bè hay nhờ con giúp điều gì?</p>
+          <textarea class="input-field child-input" placeholder="VD: Con thích đặt câu hỏi và tìm hiểu...">Con thích đặt câu hỏi và tìm hiểu tại sao mọi thứ hoạt động. Bạn bè hay nhờ con giải thích bài khoa học.</textarea>
         </div>
 
         <div class="card" style="border-color:#FED7AA;">
           <div class="card-title" style="color:var(--child);">🎭 Con là người như thế nào?</div>
+          <p style="font-size:13px;color:var(--gray-400);margin-bottom:8px;font-style:italic;">Không có câu trả lời đúng hay sai — chọn những cái đúng nhất với con.</p>
           <div class="option-chips">
             <div class="chip selected-c">Hay đặt câu hỏi</div>
             <div class="chip">Thích làm việc nhóm</div>
