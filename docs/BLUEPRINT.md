@@ -100,8 +100,8 @@ Persona Discovery → Dream + Career Path → Skill Journey → Weekly Ritual �
 
 | Layer | Choice |
 |---|---|
-| Frontend | Next.js 14+ (App Router) + Tailwind CSS + shadcn/ui |
-| ORM | Prisma (vendor-agnostic, swap DB anytime) |
+| Frontend | Next.js 16 (App Router) + Tailwind CSS v3 + shadcn/ui |
+| ORM | Prisma 7 + `@prisma/adapter-pg` driver adapter (vendor-agnostic) |
 | Database | PostgreSQL (Docker local → AWS RDS production) |
 | Auth | NextAuth.js v5 — Google, Facebook, Telegram, Apple |
 | API Gateway | Next.js API routes (MVP) → Kong / AWS API Gateway (scale) |

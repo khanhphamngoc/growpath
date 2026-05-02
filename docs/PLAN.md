@@ -85,7 +85,7 @@ S-13 (parent form) → S-14 (child form) → S-15 (versioning)
 - As a developer, I want `npm run dev` with hot reload so that UI changes are visible instantly without restarting.
 
 **Technical Deliverables**
-- Next.js 14+ (App Router) + Tailwind CSS + shadcn/ui initialised
+- Next.js 16 (App Router) + Tailwind CSS v3 + shadcn/ui initialised
 - Docker Compose: `app`, `postgres`, `redis` services
 - `.env.example` with all required vars
 - Health check endpoint `GET /api/health` → 200

@@ -1,0 +1,167 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum Role {
+  PARENT
+  CHILD
+}
+
+enum MilestoneType {
+  FIRST_CHECKIN
+  SKILL_LEVEL_UP
+  WEEK_STREAK_7
+  FIRST_ROADMAP_MONTH
+}
+
+// ─── Core Entities ───────────────────────────────────────────────────────────
+
+model User {
+  id                       String    @id @default(cuid())
+  email                    String    @unique
+  role                     Role
+  name                     String
+  city                     String?
+  philosophyAcknowledgedAt DateTime?
+  createdAt                DateTime  @default(now())
+
+  familyLinksAsParent FamilyLink[] @relation("ParentLinks")
+  familyLinksAsChild  FamilyLink[] @relation("ChildLinks")
+  childProfile        ChildProfile?
+}
+
+// Parent → child relationship; composite PK enforces uniqueness
+model FamilyLink {
+  parentId String
+  childId  String
+
+  parent User @relation("ParentLinks", fields: [parentId], references: [id], onDelete: Cascade)
+  child  User @relation("ChildLinks",  fields: [childId],  references: [id], onDelete: Cascade)
+
+  @@id([parentId, childId])
+  @@index([childId])
+}
+
+// Extended profile for CHILD users only
+model ChildProfile {
+  userId    String   @id
+  dob       DateTime
+  grade     Int
+  school    String?
+  avatarUrl String?
+  xp        Int      @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─── Persona Discovery ───────────────────────────────────────────────────────
+
+// Versioned persona synthesised by Claude from parent + child inputs.
+// childId references User.id (a CHILD role user).
+model Persona {
+  id                   String    @id @default(cuid())
+  childId              String
+  version              Int       @default(1)
+  dimensions           Json
+  headline             String
+  childConfirmedAt     DateTime?
+  needsEditorialReview Boolean   @default(false)
+  createdAt            DateTime  @default(now())
+
+  delta PersonaDelta?
+
+  @@unique([childId, version])
+  @@index([childId])
+}
+
+// Parent-only view of conflicts between parent and child inputs.
+// 1:1 with Persona; personaId is the PK.
+model PersonaDelta {
+  personaId           String @id
+  parentView          Json
+  childView           Json
+  deltaNotes          Json
+  possiblyUnderstated Json   @default("[]")
+
+  persona Persona @relation(fields: [personaId], references: [id], onDelete: Cascade)
+}
+
+// ─── Career Journey ───────────────────────────────────────────────────────────
+
+// Child's dream career — versioned so updates are non-destructive.
+model Dream {
+  id        String   @id @default(cuid())
+  childId   String
+  text      String
+  version   Int      @default(1)
+  createdAt DateTime @default(now())
+
+  careerClusters CareerCluster[]
+
+  @@index([childId])
+}
+
+// Claude-generated career clusters from a dream.
+// clusters: JSON array of { title, emoji, description, skills[], examples[] }
+// selectedCluster: the cluster title the child chose
+model CareerCluster {
+  id              String  @id @default(cuid())
+  dreamId         String
+  clusters        Json
+  selectedCluster String?
+
+  dream Dream @relation(fields: [dreamId], references: [id], onDelete: Cascade)
+
+  @@index([dreamId])
+}
+
+// Claude-generated skill roadmap for the selected career.
+// roadmap: JSON { quarters: [{ skills: [], monthlyGoals: [] }] }
+model SkillRoadmap {
+  id               String   @id @default(cuid())
+  childId          String
+  careerId         String
+  roadmap          Json
+  currentWeekFocus String?
+  createdAt        DateTime @default(now())
+
+  @@index([childId])
+}
+
+// ─── Weekly Ritual ────────────────────────────────────────────────────────────
+
+// One check-in per child per calendar week (unique guard on childId + weekNumber).
+model WeeklyCheckin {
+  id               String   @id @default(cuid())
+  childId          String
+  weekNumber       Int
+  mood             String
+  activityLog      String
+  reflection       String
+  scenarioResponse String?
+  createdAt        DateTime @default(now())
+
+  @@unique([childId, weekNumber])
+  @@index([childId])
+}
+
+// ─── Milestones ───────────────────────────────────────────────────────────────
+
+// Each type fires exactly once per child — @@unique is the idempotency guard.
+model Milestone {
+  id         String        @id @default(cuid())
+  childId    String
+  type       MilestoneType
+  title      String
+  xp         Int
+  achievedAt DateTime      @default(now())
+
+  @@unique([childId, type])
+  @@index([childId])
+}

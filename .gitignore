@@ -1,0 +1,27 @@
+# dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# environment files — never commit real secrets
+.env*.local
+.env.local
+
+# local dev overrides (not .env.example — that stays committed)
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# editors
+.idea/
+.vscode/
+
+# misc
+*.log
+coverage/
